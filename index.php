@@ -21,6 +21,7 @@
 
         <link rel="stylesheet" href="css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="css/flipclock.css">
+        <link rel="stylesheet" href="css/animate.css">
         <link rel="stylesheet" href="css/main.css">
 
          <script src="js/vendor/jquery-1.11.1.min.js"></script>
