@@ -1,54 +1,46 @@
 <?php
 
-
 $db = new SQLite3('devstat.sqlite');
-
 $now = date('Y-m-d H:i:s', time());
+$string = file_get_contents("config.json");
+$configs = json_decode($string, true);
 
-$q = "SELECT * FROM status where end_date > '$now'";
-$res = $db->query($q);
+// find unterminated state and tab color
+//row count
+$rows = $db->query("SELECT COUNT(*) as count FROM status WHERE end_date IS NULL");
+$row = $rows->fetchArray();
+$numRows = $row['count'];
 
-$result = [];
-while( $row = $res->fetchArray(SQLITE3_ASSOC) )
-    $result[] = $row;
-
-$rowCount = count($result);
-
-if($rowCount > 0)
-{
-
-    echo "<h1>Sorry, We're busy.</h1>";
-    echo "<h3>Please check our status below </h3>";
-    echo "<script>$('body').css('background-color', 'red');</script>";
-    echo '<div class="table-responsive">
-    <table class="table table-striped">
-    <thead>
-        <tr class="danger">
-          <th>Subject</th>
-          <th>Start</th>
-          <th>End</th>
-          <th>Type</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>';
-
-    foreach ($result as $row) {
-        echo '<tr class="danger">' . '<td>'.$row['subject']. '</td>' . 
-        '<td>'.$row['start_date']. '</td>' .
-        '<td>'.$row['end_date']. '</td>' .
-        '<td>'.$row['type']. '</td>' .
-        '<td>'.$row['description']. '</td>' .
-        '</tr>';
-    }
-
-    echo "</tbody></table></div>";
+if ($numRows > 0) {
+    $query = "SELECT * FROM status WHERE end_date IS NULL ORDER BY id LIMIT 1";
+    $res = $db->query($query);
+    $UnterminatedState = $res->fetchArray(SQLITE3_ASSOC);
+    $statusTabColor = $configs[$UnterminatedState['type']]['color'];
+    $spent = round(strtotime($now) - strtotime($UnterminatedState['start_date']))/60;
+    $countDown = $configs[$UnterminatedState['type']]['time'] - $spent;
+    if($countDown<0)
+        $countDown = 0;
+    echo '<script>var status_duration ='.($countDown*60).'; </script>';
+    echo "<script>$('body').css('background-color', '$statusTabColor');</script>";
 
 }
-else
-{
-    echo "<h1>Hooray, We're free.</h1>";
-    echo "<script>$('body').css('background-color', 'white');</script>";
-}
+?>
+
+<div class="countdown"></div>
+
+<?php if (isset($UnterminatedState)): ?>
+    <div class="voffset6">
+        <h3><strong>Current state :</strong> <?php echo $configs[$UnterminatedState['type']]['title']; ?> </h3>
+        <h5><strong>Date :</strong> <?php echo date('Y-m-d',strtotime($UnterminatedState['start_date'])); ?></h5>
+        <h5><strong>Started at :</strong> <?php echo date('H:i',strtotime($UnterminatedState['start_date'])); ?> </h5>
+        <h5><strong>Planed close time :</strong> <?php echo $UnterminatedState['duration']; ?> min </h5>
+        <h5><strong>Description :</strong> <?php echo $UnterminatedState['description']; ?></h5>
+    </div>
+<?php else: ?>
+    <div class="voffset6">
+        <h3><strong>Idle...</strong></h3>
+    </div>
+<?php endif; ?>
+<button class="btn btn-success" onclick="location.reload();">Refresh</button>
 
 

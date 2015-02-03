@@ -1,0 +1,32 @@
+{
+  "pomodoro": {
+    "title": "Pomodoro",
+    "time": 25,
+    "color": "#F00",
+    "enable": true
+  },
+  "short_break": {
+    "title": "Short break",
+    "time": 5,
+    "color": "#0F0",
+    "enable": true
+  },
+  "long_break": {
+    "title": "Long break",
+    "time": 15,
+    "color": "#00F",
+    "enable": true
+  },
+  "session": {
+    "title": "Session",
+    "time": 60,
+    "color": "#F00",
+    "enable": true
+  },
+  "idle": {
+    "title": "Idle",
+    "time": 25,
+    "color": "#FFF",
+    "enable": true
+  }
+}
