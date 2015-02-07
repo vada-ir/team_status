@@ -9,6 +9,8 @@
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
         <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:bold,bolditalic|Inconsolata:italic|Droid+Sans">
         <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -27,6 +29,7 @@
          <script src="js/vendor/jquery-1.11.1.min.js"></script>
         <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
         <script src="js/flipclock.min.js"></script>
+        <script>var status_duration = 0 ;</script>
 
     </head>
     <body>

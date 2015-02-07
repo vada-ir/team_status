@@ -1,16 +1,15 @@
 <?php
-
-$db = new SQLite3('devstat.sqlite');
+ini_set("display_errors", "1");
+error_reporting(E_ALL);
+$db = new SQLite3('db/devstat.sqlite');
 $now = date('Y-m-d H:i:s', time());
 $string = file_get_contents("config.json");
 $configs = json_decode($string, true);
-
 //first auth time..
-if (!isset($_SERVER['PHP_AUTH_USER'])) {
-    header('WWW-Authenticate: Basic realm="Dev-Team"');
-    header('HTTP/1.0 401 Unauthorized');
-    die(':)))');
-} else {
+if (isset($_SERVER['HTTP_AUTHORIZATION']) && preg_match('/Basic\s+(.*)$/i', $_SERVER['HTTP_AUTHORIZATION'], $matches)) {
+    list($name, $password) = explode(':', base64_decode($matches[1]));
+    $_SERVER['PHP_AUTH_USER'] = strip_tags($name);
+    $_SERVER['PHP_AUTH_PW'] = strip_tags($password);
     $user = $_SERVER['PHP_AUTH_USER'];
     $pass = $_SERVER['PHP_AUTH_PW'];
     if($user != 'dev' || $pass != 'dev@status')
@@ -19,6 +18,12 @@ if (!isset($_SERVER['PHP_AUTH_USER'])) {
         header('HTTP/1.0 401 Unauthorized');
         die(':P');
     }
+}
+else
+{
+    header('WWW-Authenticate: Basic realm="Dev-Team"');
+    header('HTTP/1.0 401 Unauthorized');
+    die(':)))');
 }
 
 if (isset($_POST['state'])) {

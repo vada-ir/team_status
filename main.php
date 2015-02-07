@@ -1,6 +1,6 @@
 <?php
 
-$db = new SQLite3('devstat.sqlite');
+$db = new SQLite3('db/devstat.sqlite');
 $now = date('Y-m-d H:i:s', time());
 $string = file_get_contents("config.json");
 $configs = json_decode($string, true);
@@ -20,7 +20,7 @@ if ($numRows > 0) {
     $countDown = $configs[$UnterminatedState['type']]['time'] - $spent;
     if($countDown<0)
         $countDown = 0;
-    echo '<script>var status_duration ='.($countDown*60).'; </script>';
+    echo '<script>status_duration ='.($countDown*60).'; </script>';
     echo "<script>$('body').css('background-color', '$statusTabColor');</script>";
 
 }
