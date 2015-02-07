@@ -31,7 +31,7 @@ $(document).ready(function(){
         }
        // clockFace: 'MinuteCounter'
     });
-    clock.setTime(10);
+    clock.setTime(status_duration);
 
     clock.start();
 
