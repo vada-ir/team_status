@@ -30,7 +30,7 @@ if ($numRows > 0) {
 
 <?php if (isset($UnterminatedState)): ?>
     <div class="voffset6">
-        <h3 class="animated shake" ><strong>Current state :</strong> <?php echo $configs[$UnterminatedState['type']]['title']; ?> </h3>
+        <h3 class="animated shake" ><strong>Current state :</strong><em class="current_status"><?php echo $configs[$UnterminatedState['type']]['title']; ?> </em></h3>
         <h5><strong>Date :</strong> <?php echo date('Y-m-d',strtotime($UnterminatedState['start_date'])); ?></h5>
         <h5><strong>Started at :</strong> <?php echo date('H:i',strtotime($UnterminatedState['start_date'])); ?> </h5>
         <h5><strong>Planed close time :</strong> <?php echo $UnterminatedState['duration']; ?> min </h5>

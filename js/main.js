@@ -1,4 +1,6 @@
 $(document).ready(function(){
+    var granted = false;
+    Notify.requestPermission(function(){granted = true}, function(){granted= false});
     $('#newState').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget); // Button that triggered the modal
         var title = button.data('title'); // Extract info from data-* attributes
@@ -13,11 +15,24 @@ $(document).ready(function(){
     })
 
     //count down
+    var showForFirstTime = false;
     var clock = $('.countdown').FlipClock({
-        countdown: true
+        countdown: true,
+        stop : function() {
+            if (!showForFirstTime) {
+                showForFirstTime = true;
+                if (granted) {
+                    var myNotification = new Notify('Status is changed!', {
+                        body: 'The last status was ' + $('em.current_status').text()
+                    });
+                    myNotification.show();
+                }
+            }
+        }
        // clockFace: 'MinuteCounter'
     });
-    clock.setTime(status_duration);
+    clock.setTime(10);
+
     clock.start();
 
 });
