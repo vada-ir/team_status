@@ -19,6 +19,7 @@ $(document).ready(function(){
     var clock = $('.countdown').FlipClock({
         countdown: true,
         stop : function() {
+            // show notification on end
             if (!showForFirstTime) {
                 showForFirstTime = true;
                 if (granted) {
@@ -28,12 +29,28 @@ $(document).ready(function(){
                     myNotification.show();
                 }
             }
-        }
-       // clockFace: 'MinuteCounter'
-    });
-    clock.setTime(status_duration);
 
+        }
+    });
+
+    clock.setTime(status_duration);
     clock.start();
+
+    // reset counter to count up when time is 0
+    var countUp = false;
+    var reloadcounter = setInterval(function () {
+        if (clock.getTime() == 0)
+        {
+            countUp = true;
+            clock.setCountdown(false);
+        }
+    }, 4000);
+
+    var refreshPage = setInterval(function(){
+        console.log(reloadPage + '  -  ' + countUp);
+        if(reloadPage && countUp)
+            location.reload();
+    },100000);
 
 });
 

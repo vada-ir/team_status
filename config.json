@@ -2,31 +2,36 @@
   "pomodoro": {
     "title": "Pomodoro",
     "time": 25,
-    "color": "#F00",
+    "color": "#CF000F",
+    "font_color": "#FFF",
     "enable": true
   },
   "short_break": {
     "title": "Short break",
-    "time": 5,
-    "color": "#0F0",
+    "time": 1,
+    "color": "#3498db",
+    "font_color": "#FFF",
     "enable": true
   },
   "long_break": {
     "title": "Long break",
     "time": 15,
-    "color": "#00F",
+    "color": "#2980b9",
+    "font_color": "#FFF",
     "enable": true
   },
   "session": {
     "title": "Session",
     "time": 60,
-    "color": "#F00",
+    "color": "#f39c12",
+    "font_color": "#FFF",
     "enable": true
   },
   "idle": {
     "title": "Idle",
     "time": 25,
-    "color": "#FFF",
+    "color": "#ecf0f1",
+    "font_color": "#875F9A",
     "enable": true
   }
 }

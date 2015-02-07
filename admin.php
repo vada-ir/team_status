@@ -66,6 +66,12 @@ if($numRows > 0)
     $res = $db->query($query);
     $UnterminatedState = $res->fetchArray(SQLITE3_ASSOC);
     $statusTabColor = $configs[$UnterminatedState['type']]['color'];
+    $fontColor = $configs[$UnterminatedState['type']]['font_color'];
+    $spent = round(strtotime($now) - strtotime($UnterminatedState['start_date']))/60;
+    $countDown = $configs[$UnterminatedState['type']]['time'] - $spent;
+    if($countDown<0)
+        $countDown = 0;
+    echo '<script>status_duration ='.($countDown*60).'; </script>';
 }
 
 ?>
@@ -84,8 +90,9 @@ if($numRows > 0)
         <div role="tabpanel" class="tab-pane fade in active panel panel-default" id="status"
              style="background-color: <?php if (isset($statusTabColor)) echo $statusTabColor; ?>"
             >
-            <div class="panel-body">
+            <div class="panel-body row">
 
+                <div class="col-lg-6">
                 <!-- status buttons-->
                 <?php
                 foreach ($configs as $key => $conf) {
@@ -158,7 +165,7 @@ if($numRows > 0)
                 </div>
 
                 <?php if (isset($UnterminatedState)): ?>
-                    <div class="voffset6">
+                    <div class="voffset6" style="color: <?php echo $fontColor; ?> ;">
                         <h5><strong>Date :</strong> <?php echo  date('Y-m-d',strtotime($UnterminatedState['start_date'])); ?></h5>
                         <h5><strong>Current state :</strong> <?php echo $UnterminatedState['type']; ?> </h5>
                         <h5><strong>Started at :</strong> <?php echo  date('H:i',strtotime($UnterminatedState['start_date'])); ?> </h5>
@@ -170,7 +177,10 @@ if($numRows > 0)
                         <h3><strong>Idle...</strong></h3>
                     </div>
                 <?php endif; ?>
-
+                    </div>
+                <div class="col-lg-6">
+                    <div class="countdown"></div>
+                </div>
             </div>
         </div>
 
