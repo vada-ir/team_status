@@ -52,7 +52,7 @@ if (isset($_POST['state'])) {
     // add new status
     $q = "INSERT INTO status VALUES(null, '$type', '$now', null, '$type', '$description', $duration) ";
     $res = $db->exec($q);
-    header('Location: ' . $_SERVER['PHP_SELF']);
+    header('Location: ' . "http://" . $_SERVER['HTTP_HOST'] . '/admin');
     die();
 }
 
