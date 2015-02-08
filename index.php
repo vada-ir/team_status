@@ -30,7 +30,7 @@
         <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
         <script src="js/flipclock.min.js"></script>
         <script src="js/notify.js"></script>
-        <script>var status_duration = 0 ; var reloadPage = false; </script>
+        <script>var status_duration = 0 ; var reloadPage = false; var extraTime = -1; </script>
 
     </head>
     <body>

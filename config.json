@@ -8,7 +8,7 @@
   },
   "short_break": {
     "title": "Short break",
-    "time": 1,
+    "time": 5,
     "color": "#3498db",
     "font_color": "#FFF",
     "enable": true
@@ -29,7 +29,7 @@
   },
   "idle": {
     "title": "Idle",
-    "time": 25,
+    "time": 30,
     "color": "#ecf0f1",
     "font_color": "#875F9A",
     "enable": true

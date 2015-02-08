@@ -1,6 +1,9 @@
 $(document).ready(function(){
+    // Request permission for notification access.
     var granted = false;
     Notify.requestPermission(function(){granted = true}, function(){granted= false});
+
+    //Modal onshow event get some default values (defined in config) for inputs from data attributes.
     $('#newState').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget); // Button that triggered the modal
         var title = button.data('title'); // Extract info from data-* attributes
@@ -14,8 +17,13 @@ $(document).ready(function(){
         modal.find('.modal-body #state').val(id);
     })
 
-    //count down
+    //flag to show notification just once at end.
     var showForFirstTime = false;
+
+    /*  Init countdown
+    *   First set countdown to true to counting down to show time remaining.
+    *   Using stop callback to popup a notification.
+    * */
     var clock = $('.countdown').FlipClock({
         countdown: true,
         stop : function() {
@@ -33,24 +41,36 @@ $(document).ready(function(){
         }
     });
 
-    clock.setTime(status_duration);
+    // Indicate whether counter must counting up
+    var countUp = false;
+
+    // When status time is exceeds the planned time status fall into extra time.
+    if(extraTime >= 0)
+    {
+        clock.setTime(extraTime);
+        countUp = true;
+        clock.setCountdown(false);
+    }
+    else
+        clock.setTime(status_duration);
+
+    // start counter
     clock.start();
 
     // reset counter to count up when time is 0
-    var countUp = false;
     var reloadcounter = setInterval(function () {
-        if (clock.getTime() == 0)
+        if(clock.getTime() == 0)
         {
             countUp = true;
             clock.setCountdown(false);
         }
     }, 4000);
 
+    // check if status in extra time and page must reload every x seconds.
     var refreshPage = setInterval(function(){
-        console.log(reloadPage + '  -  ' + countUp);
         if(reloadPage && countUp)
             location.reload();
-    },100000);
+    },20000);
 
 });
 

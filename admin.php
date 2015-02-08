@@ -53,6 +53,7 @@ if (isset($_POST['state'])) {
     $q = "INSERT INTO status VALUES(null, '$type', '$now', null, '$type', '$description', $duration) ";
     $res = $db->exec($q);
     header('Location: ' . $_SERVER['PHP_SELF']);
+    die();
 }
 
 // find unterminated state and tab color
@@ -69,10 +70,12 @@ if($numRows > 0)
     $statusTabColor = $configs[$UnterminatedState['type']]['color'];
     $fontColor = $configs[$UnterminatedState['type']]['font_color'];
     $spent = round(strtotime($now) - strtotime($UnterminatedState['start_date']))/60;
-    $countDown = $configs[$UnterminatedState['type']]['time'] - $spent;
+    $plannedTime = $configs[$UnterminatedState['type']]['time'];
+    $extraTime = round(strtotime($now) - strtotime("+$plannedTime minute", strtotime($UnterminatedState['start_date'])))/60;
+    $countDown = $plannedTime - $spent;
     if($countDown<0)
         $countDown = 0;
-    echo '<script>status_duration ='.($countDown*60).'; </script>';
+    echo '<script>status_duration ='.($countDown*60).'; extraTime ='.($extraTime*60).'; </script>';
 }
 
 ?>
