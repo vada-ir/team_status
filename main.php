@@ -18,7 +18,7 @@ if ($numRows > 0) {
     $statusTabColor = $configs[$UnterminatedState['type']]['color'];
     $fontColor = $configs[$UnterminatedState['type']]['font_color'];
     $spent = round(strtotime($now) - strtotime($UnterminatedState['start_date']))/60;
-    $plannedTime = $configs[$UnterminatedState['type']]['time'];
+    $plannedTime =$UnterminatedState['duration'];
     $extraTime = round(strtotime($now) - strtotime("+$plannedTime minute", strtotime($UnterminatedState['start_date'])))/60;
     $countDown = $plannedTime - $spent;
     if($countDown<0)
