@@ -12,18 +12,15 @@ if (isset($_SERVER['HTTP_AUTHORIZATION']) && preg_match('/Basic\s+(.*)$/i', $_SE
     $_SERVER['PHP_AUTH_PW'] = strip_tags($password);
     $user = $_SERVER['PHP_AUTH_USER'];
     $pass = $_SERVER['PHP_AUTH_PW'];
-    if($user != 'dev' || $pass != 'dev@status')
-    {   // error
+    if ($user != 'test' || $pass != 'test') {   // error
         header('WWW-Authenticate: Basic realm="Vada-WEB"');
         header('HTTP/1.0 401 Unauthorized');
         die(':P');
     }
-}
-else
-{
+} else {
     header('WWW-Authenticate: Basic realm="Dev-Team"');
     header('HTTP/1.0 401 Unauthorized');
-    die(':)))');
+    die(':)');
 }
 
 if (isset($_POST['state'])) {
@@ -39,8 +36,7 @@ if (isset($_POST['state'])) {
     $row = $rows->fetchArray();
     $numRows = $row['count'];
 
-    if($numRows > 0)
-    {
+    if ($numRows > 0) {
         $query = "SELECT * FROM status WHERE end_date IS NULL ORDER BY id LIMIT 1";
         $res = $db->query($query);
 
@@ -62,20 +58,19 @@ $rows = $db->query("SELECT COUNT(*) as count FROM status WHERE end_date IS NULL"
 $row = $rows->fetchArray();
 $numRows = $row['count'];
 
-if($numRows > 0)
-{
+if ($numRows > 0) {
     $query = "SELECT * FROM status WHERE end_date IS NULL ORDER BY id LIMIT 1";
     $res = $db->query($query);
     $UnterminatedState = $res->fetchArray(SQLITE3_ASSOC);
     $statusTabColor = $configs[$UnterminatedState['type']]['color'];
     $fontColor = $configs[$UnterminatedState['type']]['font_color'];
-    $spent = round(strtotime($now) - strtotime($UnterminatedState['start_date']))/60;
-    $plannedTime =$UnterminatedState['duration'];
-    $extraTime = round(strtotime($now) - strtotime("+$plannedTime minute", strtotime($UnterminatedState['start_date'])))/60;
+    $spent = round(strtotime($now) - strtotime($UnterminatedState['start_date'])) / 60;
+    $plannedTime = $UnterminatedState['duration'];
+    $extraTime = round(strtotime($now) - strtotime("+$plannedTime minute", strtotime($UnterminatedState['start_date']))) / 60;
     $countDown = $plannedTime - $spent;
-    if($countDown<0)
+    if ($countDown < 0)
         $countDown = 0;
-    echo '<script>status_duration ='.($countDown*60).'; extraTime ='.($extraTime*60).'; </script>';
+    echo '<script>status_duration =' . ($countDown * 60) . '; extraTime =' . ($extraTime * 60) . '; </script>';
 }
 
 ?>
@@ -97,91 +92,100 @@ if($numRows > 0)
             <div class="panel-body row">
 
                 <div class="col-lg-6">
-                <!-- status buttons-->
-                <?php
-                foreach ($configs as $key => $conf) {
-                    if ($conf['enable'])
-                        echo ' <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newState"
+                    <!-- status buttons-->
+                    <?php
+                    foreach ($configs as $key => $conf) {
+                        if ($conf['enable'])
+                            echo ' <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newState"
                         data-title="' . $conf['title'] . '" data-time="' . $conf['time'] . '"  id="' . $key . '" >' . $conf['title'] . '</button>';
-                }
+                    }
 
-                ?>
+                    ?>
 
 
 
-                <div class="modal fade" id="newState" tabindex="-1" role="dialog"
-                     aria-labelledby="newStateLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <form class="form-horizontal" method="post" action="/admin">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                            aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="newStateLabel">New message</h4>
-                                </div>
-                                <div class="modal-body">
-
-                                    <div class="form-group">
-                                        <label for="date" class="col-sm-3 control-label">Date:</label>
-
-                                        <div class="col-sm-9">
-                                            <input type="text" id="date" name="date"
-                                                   value="<?php echo date('Y-m-d H:i:s', time()); ?>"
-                                                   readonly="readonly">
-                                        </div>
+                    <div class="modal fade" id="newState" tabindex="-1" role="dialog"
+                         aria-labelledby="newStateLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <form class="form-horizontal" method="post" action="/admin">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal"
+                                                aria-label="Close"><span
+                                                aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="newStateLabel">New message</h4>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="message-text" class="col-sm-3 control-label">New state:</label>
+                                    <div class="modal-body">
 
-                                        <div class="col-sm-9">
-                                            <input type="text" id="state" name="state" readonly="readonly">
+                                        <div class="form-group">
+                                            <label for="date" class="col-sm-3 control-label">Date:</label>
+
+                                            <div class="col-sm-9">
+                                                <input type="text" id="date" name="date"
+                                                       value="<?php echo date('Y-m-d H:i:s', time()); ?>"
+                                                       readonly="readonly">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="message-text" class="col-sm-3 control-label">Planed time:</label>
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-sm-3 control-label">New state:</label>
 
-                                        <div class="col-sm-2">
-                                            <input type="text" name="time" class="form-control" id="time">
+                                            <div class="col-sm-9">
+                                                <input type="text" id="state" name="state" readonly="readonly">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="message-text" class="col-sm-3 control-label">Planed
+                                                time:</label>
+
+                                            <div class="col-sm-2">
+                                                <input type="text" name="time" class="form-control" id="time">
+                                            </div>
+
+                                            <div class="col-sm-2">
+                                                <h5 id="min">min</h5>
+                                            </div>
                                         </div>
 
-                                        <div class="col-sm-2">
-                                            <h5 id="min">min</h5>
-                                        </div>
-                                    </div>
+                                        <div class="form-group">
+                                            <label for="message-text"
+                                                   class="col-sm-3 control-label">Description:</label>
 
-                                    <div class="form-group">
-                                        <label for="message-text" class="col-sm-3 control-label">Description:</label>
-
-                                        <div class="col-sm-9">
+                                            <div class="col-sm-9">
                                             <textarea name="description" class="form-control"
                                                       id="description"></textarea>
+                                            </div>
                                         </div>
+
                                     </div>
-
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                        </button>
+                                        <input type="submit" class="btn btn-primary" value="Let's go!">
+                                    </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                    <input type="submit" class="btn btn-primary" value="Let's go!">
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
+
+                    <?php if (isset($UnterminatedState)): ?>
+                        <div class="voffset6" style="color: <?php echo $fontColor; ?> ;">
+                            <h5><strong>Date
+                                    :</strong> <?php echo date('Y-m-d', strtotime($UnterminatedState['start_date'])); ?>
+                            </h5>
+                            <h5><strong>Current state :</strong> <?php echo $UnterminatedState['type']; ?> </h5>
+                            <h5><strong>Started at
+                                    :</strong> <?php echo date('H:i', strtotime($UnterminatedState['start_date'])); ?>
+                            </h5>
+                            <h5><strong>Planed close time :</strong> <?php echo $UnterminatedState['duration']; ?> min
+                            </h5>
+                            <h5><strong>Description :</strong> <?php echo $UnterminatedState['description']; ?></h5>
+                        </div>
+                    <?php else: ?>
+                        <div class="voffset6">
+                            <h3><strong>Idle...</strong></h3>
+                        </div>
+                    <?php endif; ?>
                 </div>
-
-                <?php if (isset($UnterminatedState)): ?>
-                    <div class="voffset6" style="color: <?php echo $fontColor; ?> ;">
-                        <h5><strong>Date :</strong> <?php echo  date('Y-m-d',strtotime($UnterminatedState['start_date'])); ?></h5>
-                        <h5><strong>Current state :</strong> <?php echo $UnterminatedState['type']; ?> </h5>
-                        <h5><strong>Started at :</strong> <?php echo  date('H:i',strtotime($UnterminatedState['start_date'])); ?> </h5>
-                        <h5><strong>Planed close time :</strong> <?php echo $UnterminatedState['duration']; ?> min </h5>
-                        <h5><strong>Description :</strong> <?php echo $UnterminatedState['description']; ?></h5>
-                    </div>
-                <?php else: ?>
-                    <div class="voffset6">
-                        <h3><strong>Idle...</strong></h3>
-                    </div>
-                <?php endif; ?>
-                    </div>
                 <div class="col-lg-6">
                     <div class="countdown"></div>
                 </div>
@@ -226,11 +230,11 @@ if($numRows > 0)
                             $end_date = date('H:i', strtotime($row['end_date']));
                             $duration = strtotime($row['end_date']) - strtotime($row['start_date']);
                             $minutes = round($duration / 60);
-                            $duration = $minutes.' min';
+                            $duration = $minutes . ' min';
                         } else {
                             $end_date = $duration = '-';
                         }
-                        if($end_date == '-')
+                        if ($end_date == '-')
                             echo '<tr class="success" >';
                         else
                             echo '<tr class="" >';

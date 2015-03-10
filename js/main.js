@@ -1,7 +1,11 @@
-$(document).ready(function(){
+$(document).ready(function () {
     // Request permission for notification access.
     var granted = false;
-    Notify.requestPermission(function(){granted = true}, function(){granted= false});
+    Notify.requestPermission(function () {
+        granted = true
+    }, function () {
+        granted = false
+    });
 
     //Modal onshow event get some default values (defined in config) for inputs from data attributes.
     $('#newState').on('show.bs.modal', function (event) {
@@ -21,12 +25,12 @@ $(document).ready(function(){
     var showForFirstTime = false;
 
     /*  Init countdown
-    *   First set countdown to true to counting down to show time remaining.
-    *   Using stop callback to popup a notification.
-    * */
+     *   First set countdown to true to counting down to show time remaining.
+     *   Using stop callback to popup a notification.
+     * */
     var clock = $('.countdown').FlipClock({
         countdown: true,
-        stop : function() {
+        stop: function () {
             // show notification on end
             if (!showForFirstTime) {
                 showForFirstTime = true;
@@ -45,8 +49,7 @@ $(document).ready(function(){
     var countUp = false;
 
     // When status time is exceeds the planned time status fall into extra time.
-    if(extraTime >= 0)
-    {
+    if (extraTime >= 0) {
         clock.setTime(extraTime);
         countUp = true;
         clock.setCountdown(false);
@@ -59,18 +62,17 @@ $(document).ready(function(){
 
     // reset counter to count up when time is 0
     var reloadcounter = setInterval(function () {
-        if(clock.getTime() == 0)
-        {
+        if (clock.getTime() == 0) {
             countUp = true;
             clock.setCountdown(false);
         }
     }, 4000);
 
     // check if status in extra time and page must reload every x seconds.
-    var refreshPage = setInterval(function(){
-        if(reloadPage && countUp)
+    var refreshPage = setInterval(function () {
+        if (reloadPage && countUp)
             location.reload();
-    },20000);
+    }, 20000);
 
 });
 
