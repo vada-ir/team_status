@@ -19,4 +19,4 @@ A minimal development team status panel.
 - notify.js
 
 ## TODO
-- [ ] Using Regactjs
+- [ ] Using Reactjs
